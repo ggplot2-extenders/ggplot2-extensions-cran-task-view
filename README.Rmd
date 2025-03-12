@@ -1,0 +1,19 @@
+---
+output: github_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# CRAN Task View for ggplot2 Extensions
+
+This repository is used to collaborate on the CRAN Task View for ggplot2 Extensions.
+The goal of this task view is to provide a comprehensive list of packages that
+extend ggplot2.
+
+It is currently work in progress. See also:
+https://github.com/ggplot2-extenders/ggplot-extension-club/discussions/82#
