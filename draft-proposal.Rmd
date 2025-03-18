@@ -1,0 +1,87 @@
+---
+output: github_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Draft Proposal
+
+## Preamble
+
+This document is a draft proposal. It has no formal status and is subject
+to change. It has not been submitted.
+
+## Scope
+
+*TODO* Add some introduction on Graphics or Grammar and ggplot2
+
+Proposed scope: "CRAN packages self-identifying as ggplot2 extensions"
+To be decided: "Alternatives to ggplot2 for implementing Graphics of Grammar"
+
+## Related CRAN Task Views
+
+*TODO*
+[Dynamic Visualizations](https://cran.r-project.org/web/views/DynamicVisualizations.html)
+
+*TODO* The following Task View is not on CRAN. Check with maintainers to assert the current status.
+[Static Visualizations](https://github.com/dicook/ctv-staticvisualizations/blob/main/StaticVisualizations.md)
+
+## Packages
+
+For now, the code below is used to create a list of packages that extend
+ggplot2:
+
+```{r list-gg-extensions, warning=FALSE, message=FALSE}
+library(dplyr)
+library(httr2)
+library(readr)
+library(stringr)
+library(yaml)
+library(tools)
+
+gg_pkgs_cran <-
+  CRAN_package_db() |> 
+  filter(
+    str_detect(Package, "^gg|^GG|gg$|GG$"),
+    str_detect(Depends, "ggplot2") | str_detect(Imports, "ggplot2")
+  )
+
+gg_pkgs_gallery <-
+  "https://raw.githubusercontent.com/ggplot2-exts/gallery/refs/heads/gh-pages/_config.yml" |>
+  request() |>
+  req_perform() |>
+  resp_body_string() |>
+  (\(x) read_yaml(text = x))()
+
+gg_pkgs_gallery <-
+  gg_pkgs_gallery$widgets |>
+  bind_rows()
+
+gg_pkg_joined <-
+  full_join(
+    x  = gg_pkgs_cran,
+    y  = gg_pkgs_gallery,
+    by = c(Package = "name")
+  )
+
+write_csv(gg_pkg_joined, "gg-pkgs.csv")
+```
+
+We need to think of a way of presenting the list of packages: which are
+core packages?; what is a good way to present the packages in a structured
+manner?
+
+## Maintainers
+
+In no particular order:
+
+ * <https://github.com/EvaMaeRey>
+ * <https://github.com/jtr13>
+ * <https://github.com/pepijn-devries>
+
+This is a preliminary list of maintainers.
